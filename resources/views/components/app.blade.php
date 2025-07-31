@@ -1,105 +1,68 @@
-@extends('components.app')
+@props(['title' => 'La Mia Applicazione', 'head_extra' => '', 'scripts_extra' => ''])
 
-@section('title', 'Gestione Libri')
+<!DOCTYPE html>
+<html lang="it">
 
-@section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="card-title h3 mb-0">Elenco Libri</h1>
-                    </div>
-                    <div class="card-body">
-                        @if (session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Libreria - {{ $title }}</title>
 
-                        <div class="mb-4">
-                            <a href="{{ route('books.create') }}" class="btn btn-primary"><i
-                                    class="bi bi-plus-circle me-2"></i>Crea Nuovo Libro</a>
-                        </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-                        @forelse ($libri as $libro)
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body d-flex align-items-center">
-                                    <img src="{{ $libro->image ? asset('storage/images/' . $libro->image) : asset('images/mia_immagine_default2.jpg') }}"
-                                        alt="Copertina di {{ $libro->name }}" class="book-image">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-                                    <div class="flex-grow-1">
-                                        <h5 class="card-title mb-1">{{ $libro->name }}</h5>
-                                        <p class="card-text mb-0 text-muted">
-                                            Pagine: {{ $libro->pages ?? 'N/D' }} |
-                                            Anno: {{ $libro->year ?? 'N/D' }}
-                                        </p>
-                                    </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-                                    <div class="ms-auto d-flex gap-2">
-                                        <a href="{{ route('books.edit', $libro->id) }}" class="btn btn-warning btn-sm"
-                                            title="Modifica"><i class="bi bi-pencil"></i></a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteBookModal" data-book-id="{{ $libro->id }}"
-                                            data-book-name="{{ $libro->name }}" title="Elimina"><i
-                                                class="bi bi-trash"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="alert alert-info" role="alert">
-                                Nessun libro trovato nel database. Clicca su "Crea Nuovo Libro" per aggiungerne uno!
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 6rem;
+        }
 
-    {{-- Modal di Conferma Eliminazione --}}
-    <div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="deleteBookModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteBookModalLabel">Conferma Eliminazione</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Sei sicuro di voler eliminare il libro "<span id="modalBookName" class="fw-bold"></span>"? Questa azione
-                    non può essere annullata.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <form id="deleteBookForm" method="POST" action="">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Elimina</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        main {
+            flex-grow: 1;
+        }
 
-@endsection
+        .book-image {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
+        }
+    </style>
 
-@section('scripts_extra')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteBookModal = document.getElementById('deleteBookModal');
-            deleteBookModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const bookId = button.getAttribute('data-book-id');
-                const bookName = button.getAttribute('data-book-name');
+    {{ $head_extra }}
+</head>
 
-                const modalBookName = deleteBookModal.querySelector('#modalBookName');
-                modalBookName.textContent = bookName;
+<body class="bg-light d-flex flex-column min-vh-100">
 
-                const deleteForm = deleteBookModal.querySelector('#deleteBookForm');
-                deleteForm.action = `/books/${bookId}`;
-            });
-        });
+    <header>
+        <x-nav />
+    </header>
+
+    <main class="container flex-grow-1">
+        {{ $slot }}
+    </main>
+
+    <x-footer />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
-@endsection
+
+    {{ $scripts_extra }}
+</body>
+
+</html>

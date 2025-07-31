@@ -1,8 +1,5 @@
-@extends('components.app')
+<x-app title="Modifica Libro: {{ $book->name }}">
 
-@section('title', 'Modifica Libro: ' . $book->name)
-
-@section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -11,7 +8,8 @@
                         <h1 class="card-title h3 mb-0">Modifica Libro: {{ $book->name }}</h1>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('books.update', $book->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -81,4 +79,5 @@
             </div>
         </div>
     </div>
-@endsection
+
+</x-app>

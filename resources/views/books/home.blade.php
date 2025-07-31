@@ -1,8 +1,5 @@
-@extends('components.app')
+<x-app title="Home Libreria">
 
-@section('title', 'Home Libreria')
-
-@section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -38,13 +35,12 @@
                             </div>
                         @endforelse
                         <div class="text-center mt-4">
-                            <a href="{{ route('books.manage.index') }}" class="btn btn-outline-primary">Vedi Tutti i Libri
-                                <i class="bi bi-arrow-right ms-2"></i></a>
+                            <a href="{{ route('books.manage.index') }}" class="btn btn-outline-primary">Vedi Tutti i
+                                Libri <i class="bi bi-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
 
-                {{-- Sezione CTA per la gestione completa (visibile solo se autenticato) --}}
                 @auth
                     <div class="text-center py-5 bg-light p-4 rounded shadow-sm">
                         <h2 class="mb-4 fw-bold display-5 text-dark">Gestisci la Tua Collezione</h2>
@@ -55,7 +51,6 @@
                                 class="bi bi-gear-fill me-2"></i> Vai alla Gestione Libri</a>
                     </div>
                 @endauth
-                {{-- Sezione CTA per login/registrazione (visibile solo se NON autenticato) --}}
                 @guest
                     <div class="text-center py-5 bg-light p-4 rounded shadow-sm">
                         <h2 class="mb-4 fw-bold display-5 text-dark">Accedi per Gestire i Tuoi Libri</h2>
@@ -72,4 +67,5 @@
             </div>
         </div>
     </div>
-@endsection
+
+</x-app>

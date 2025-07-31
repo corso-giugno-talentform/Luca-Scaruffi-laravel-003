@@ -1,9 +1,6 @@
-@extends('components.app')
+<x-app title="Gestione Libri">
 
-@section('title', 'Gestione Libri')
-
-@section('content')
-    <div class="container">
+    <div class="container mt-5 pt-5">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card shadow-sm">
@@ -14,7 +11,8 @@
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
                             </div>
                         @endif
 
@@ -59,7 +57,8 @@
     </div>
 
     {{-- Modal di Conferma Eliminazione --}}
-    <div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="deleteBookModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="deleteBookModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
@@ -68,7 +67,8 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Sei sicuro di voler eliminare il libro "<span id="modalBookName" class="fw-bold"></span>"? Questa azione
+                    Sei sicuro di voler eliminare il libro "<span id="modalBookName" class="fw-bold"></span>"? Questa
+                    azione
                     non può essere annullata.
                 </div>
                 <div class="modal-footer">
@@ -83,23 +83,22 @@
         </div>
     </div>
 
-@endsection
+    <x-slot name="scripts_extra">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteBookModal = document.getElementById('deleteBookModal');
+                deleteBookModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const bookId = button.getAttribute('data-book-id');
+                    const bookName = button.getAttribute('data-book-name');
 
-@section('scripts_extra')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteBookModal = document.getElementById('deleteBookModal');
-            deleteBookModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const bookId = button.getAttribute('data-book-id');
-                const bookName = button.getAttribute('data-book-name');
+                    const modalBookName = deleteBookModal.querySelector('#modalBookName');
+                    modalBookName.textContent = bookName;
 
-                const modalBookName = deleteBookModal.querySelector('#modalBookName');
-                modalBookName.textContent = bookName;
-
-                const deleteForm = deleteBookModal.querySelector('#deleteBookForm');
-                deleteForm.action = `/books/${bookId}`;
+                    const deleteForm = deleteBookModal.querySelector('#deleteBookForm');
+                    deleteForm.action = `/books/${bookId}`;
+                });
             });
-        });
-    </script>
-@endsection
+        </script>
+    </x-slot>
+</x-app>

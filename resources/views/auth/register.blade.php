@@ -1,9 +1,6 @@
-@extends('components.app')
+<x-app title="Registrati - Libreria">
 
-@section('title', 'Registrati - Libreria')
-
-@section('content')
-    <div class="container mt-5 pt-5">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-lg rounded-4">
@@ -55,8 +52,8 @@
 
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary btn-lg">Registrati</button>
-                                <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg">Hai già un account?
-                                    Accedi</a>
+                                <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg">Hai già un
+                                    account? Accedi</a>
                             </div>
                         </form>
                     </div>
@@ -64,4 +61,5 @@
             </div>
         </div>
     </div>
-@endsection
+
+</x-app>

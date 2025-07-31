@@ -1,9 +1,6 @@
-@extends('components.app')
+<x-app title="Accedi - Libreria">
 
-@section('title', 'Accedi - Libreria')
-
-@section('content')
-    <div class="container mt-5 pt-5">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-lg rounded-4">
@@ -51,10 +48,17 @@
                                 <a href="{{ route('register') }}" class="btn btn-outline-secondary btn-lg">Non hai un
                                     account? Registrati</a>
                             </div>
+
+                            {{-- @if (Route::has('password.request'))
+                                <div class="text-center mt-3">
+                                    <a class="text-muted" href="{{ route('password.request') }}">Hai dimenticato la password?</a>
+                                </div>
+                            @endif --}}
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+
+</x-app>
